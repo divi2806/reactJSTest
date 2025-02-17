@@ -167,8 +167,12 @@ const login = async (req, res) => {
             res.status(401).json({ error: 'Authentication failed,password does not match' });
             return;
         }
-        // Create a JWT token
-        const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1d' });
+        // Create a JWT token (done using env variable)
+        const token = jwt.sign(
+            { userId: user._id }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '1d' }
+        );
 
         res.status(200).setHeader('Authorization', `Bearer${token}`).json({ token: token, user });
     } catch (error) {
